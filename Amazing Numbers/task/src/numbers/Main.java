@@ -1,21 +1,23 @@
 package numbers;
 
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Scanner;
 
 class AmazingNumbers {
     private Scanner sc = new Scanner(System.in);
-    private int num;
+    private Long num;
 
     private void askNumber() {
-        System.out.println("Enter a natural number:");
-        num = sc.nextInt();
+        System.out.println("Enter a request: ");
+        num = sc.nextLong();
     }
 
-    private void isNatural() {
-        if (num < 1) {
-            System.out.println("This number is not natural");
-            System.exit(1);
+    private boolean isNatural() {
+        if (num < 0) {
+            System.out.println("The first parameter should be a natural number or zero.");
         }
+        return num >= 0;
     }
 
     private boolean isEven() {
@@ -57,20 +59,52 @@ class AmazingNumbers {
         return false;
     }
 
-    private boolean isDuck(){
+    private boolean isDuck() {
         String tmp = String.valueOf(num).substring(1);
         return tmp.contains("0");
     }
 
-    public void start() {
-        askNumber();
-        isNatural();
-        System.out.println("Properties of "+ num);
-        System.out.println("        even: "+ isEven());
-        System.out.println("         odd: "+ isOdd());
-        System.out.println("        buzz: "+ isBuzz());
-        System.out.println("        duck: "+ isDuck());
+    private String formatNumber() {
+        return NumberFormat.getNumberInstance(Locale.US).format(num);
+    }
 
+    private void printIntro() {
+        System.out.println("Welcome to Amazing Numbers!");
+        System.out.println();
+        System.out.println("Supported requests:");
+        System.out.println("- enter a natural number to know its properties;");
+        System.out.println("- enter 0 to exit.");
+        System.out.println();
+    }
+
+    private boolean isPalindromic() {
+        String reverse = "";
+        String org = String.valueOf(num);
+        int length = org.length();
+        for (int i = length - 1; i >= 0; i--) {
+            reverse = reverse + org.charAt(i);
+        }
+        return org.equals(reverse);
+    }
+
+    public void start() {
+        printIntro();
+        while (true) {
+            askNumber();
+            if (num == 0) {
+                break;
+            }
+            if (!isNatural()){
+                continue;
+            }
+            System.out.println("Properties of " + formatNumber());
+            System.out.println("        even: " + isEven());
+            System.out.println("         odd: " + isOdd());
+            System.out.println("        buzz: " + isBuzz());
+            System.out.println("        duck: " + isDuck());
+            System.out.println(" palindromic: " + isPalindromic());
+        }
+        System.out.println("Goodbye!");
     }
 }
 

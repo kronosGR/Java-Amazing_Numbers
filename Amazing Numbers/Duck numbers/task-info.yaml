@@ -332,8 +332,14 @@ files:
     }
   learner_created: false
 feedback_link: https://hyperskill.org/learn/step/13199#comment
-status: Solved
+status: Failed
 feedback:
-  message: Congratulations!
-  time: Thu, 03 Nov 2022 11:47:38 UTC
-record: -1
+  message: "Wrong answer in test #1\n\nOnly computers and robots start counting from\
+    \ zero. For humans the natural numbers starts from one. Expected message: &quot;...\
+    \ is not natural&quot;\n\nPlease find below the output of your program during\
+    \ this failed test.\nNote that the &#39;&gt;&#39; character indicates the beginning\
+    \ of the input line.\n\n---\n\nWelcome to Amazing Numbers!\n\nSupported requests:\n\
+    - enter a natural number to know its properties;\n- enter 0 to exit.\n\nEnter\
+    \ a request: \n&gt; 0\nGoodbye!"
+  time: Thu, 03 Nov 2022 12:12:53 UTC
+record: 2
