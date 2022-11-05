@@ -11,12 +11,25 @@ class AmazingNumbers {
     private Scanner sc = new Scanner(System.in);
     private Long num;
     private Long num2;
+    private String keyword = "";
+    private List<String> properites = new ArrayList<>();
 
     private Pattern numericPattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
-    private boolean askNumber() {
+    public AmazingNumbers() {
+        properites.add("BUZZ");
+        properites.add("DUCK");
+        properites.add("PALINDROMIC");
+        properites.add("GAPFUL");
+        properites.add("SPY");
+        properites.add("EVEN");
+        properites.add("ODD");
+    }
+
+    private boolean askInput() {
         boolean isGoodOne = false;
         boolean isGoodTwo = false;
+        //TODO
         num = 0L;
         num2 = 0L;
         System.out.println();
@@ -42,6 +55,9 @@ class AmazingNumbers {
             } else {
                 isGoodTwo = true;
             }
+        }
+        if (valueA.length == 3) {
+            keyword = valueA[2];
         }
         return isGoodOne || isGoodTwo;
     }
@@ -78,6 +94,19 @@ class AmazingNumbers {
         return tmp.contains("0");
     }
 
+    private boolean isSpy(Long number) {
+        String tmp = String.valueOf(number);
+        Long sum = 0L;
+        Long product = 1L;
+
+        for (int i = 0; i < tmp.length(); i++) {
+            int tnum = Integer.parseInt(String.valueOf(tmp.charAt(i)));
+            sum += tnum;
+            product *= tnum;
+        }
+        return sum == product;
+    }
+
     private String formatNumber(Long number) {
         return NumberFormat.getNumberInstance(Locale.US).format(number);
     }
@@ -89,7 +118,8 @@ class AmazingNumbers {
         System.out.println("- enter a natural number to know its properties;");
         System.out.println("- enter two natural numbers to obtain the properties of the list:");
         System.out.println("  * the first parameter represents a starting number;");
-        System.out.println("  * the second parameter shows how many consecutive numbers are to be printed;");
+        System.out.println("  * the second parameters show how many consecutive numbers are to be processed;");
+        System.out.println("- two natural numbers and a property to search for;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
         System.out.println();
@@ -113,7 +143,7 @@ class AmazingNumbers {
             char first = numberString.charAt(0);
             char last = numberString.charAt(numberString.length() - 1);
             String newNumber = String.valueOf(first) + String.valueOf(last);
-            if (number % Integer.parseInt(newNumber) == 0){
+            if (number % Integer.parseInt(newNumber) == 0) {
                 return true;
             }
         }
@@ -122,10 +152,34 @@ class AmazingNumbers {
         return false;
     }
 
+    private boolean keywordIsValid() {
+        return properites.contains(keyword.toUpperCase());
+    }
+
+    private boolean checkNumWithKeyword(Long num) {
+        switch (keyword.toLowerCase()) {
+            case "buzz":
+                return isBuzz(num);
+            case "duck":
+                return isDuck(num);
+            case "palindromic":
+                return isPalindromic(num);
+            case "gapful":
+                return isGapFul(num);
+            case "spy":
+                return isSpy(num);
+            case "even":
+                return isEven(num);
+            case "odd":
+                return isOdd(num);
+        }
+        return false;
+    }
+
     public void start() {
         printIntro();
         while (true) {
-            if (!askNumber()) {
+            if (!askInput()) {
                 continue;
             }
             if (num == 0) {
@@ -137,35 +191,81 @@ class AmazingNumbers {
                 System.out.println("        duck: " + isDuck(num));
                 System.out.println(" palindromic: " + isPalindromic(num));
                 System.out.println("      gapful: " + isGapFul(num));
+                System.out.println("         spy: " + isSpy(num));
                 System.out.println("        even: " + isEven(num));
                 System.out.println("         odd: " + isOdd(num));
             } else {
-                for (Long i = num; i<=num + num2-1; i++){
-                    List<String> prop = new ArrayList<>();
+                if (keyword == "") {
+                    for (Long i = num; i <= num + num2 - 1; i++) {
+                        List<String> prop = new ArrayList<>();
 
-                    StringBuilder sb = new StringBuilder("             "+ String.valueOf(i) + " is ");
-                    if (isBuzz(i)){
-                        prop.add("buzz");
+                        StringBuilder sb = new StringBuilder("             " + String.valueOf(i) + " is ");
+                        if (isBuzz(i)) {
+                            prop.add("buzz");
+                        }
+                        if (isDuck(i)) {
+                            prop.add("duck");
+                        }
+                        if (isPalindromic(i)) {
+                            prop.add("palindromic");
+                        }
+                        if (isGapFul(i)) {
+                            prop.add("gapful");
+                        }
+                        if (isSpy(i)) {
+                            prop.add("spy");
+                        }
+                        if (isEven(i)) {
+                            prop.add("even");
+                        }
+                        if (isOdd(i)) {
+                            prop.add("odd");
+                        }
+                        sb.append(String.join(", ", prop));
+                        System.out.println(sb);
                     }
-                    if (isDuck(i)){
-                        prop.add("duck");
+                } else if (keyword != "" && keywordIsValid()) {
+                    Long i = num;
+                    int total = 0;
+                    while (total < num2) {
+                        List<String> prop = new ArrayList<>();
+                        if (checkNumWithKeyword(i)) {
+                            StringBuilder sb = new StringBuilder("             " + String.valueOf(i) + " is ");
+                            if (isBuzz(i)) {
+                                prop.add("buzz");
+                            }
+                            if (isDuck(i)) {
+                                prop.add("duck");
+                            }
+                            if (isPalindromic(i)) {
+                                prop.add("palindromic");
+                            }
+                            if (isGapFul(i)) {
+                                prop.add("gapful");
+                            }
+                            if (isSpy(i)) {
+                                prop.add("spy");
+                            }
+                            if (isEven(i)) {
+                                prop.add("even");
+                            }
+                            if (isOdd(i)) {
+                                prop.add("odd");
+                            }
+                            sb.append(String.join(", ", prop));
+                            System.out.println(sb);
+                            // System.out.print(i + " ");
+                            total++;
+                        }
+                        i++;
                     }
-                    if (isPalindromic(i)){
-                        prop.add("palindromic");
-                    }
-                    if (isGapFul(i)){
-                        prop.add("gapful");
-                    }
-                    if (isEven(i)){
-                        prop.add("even");
-                    }
-                    if (isOdd(i)){
-                        prop.add("odd");
-                    }
-                    sb.append( String.join(", ", prop));
-                    System.out.println(sb);
+
+
+                } else if (!keywordIsValid()) {
+                    System.out.println("The property [" + keyword.toUpperCase() + "] is wrong");
+                    System.out.println("Available properties: [BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, EVEN, ODD]");
+                    continue;
                 }
-
             }
         }
         System.out.println("Goodbye!");
